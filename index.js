@@ -62,16 +62,12 @@ module.exports = {
         var ws = false;
         var wsport = false;
         var wsapi = false;
-        var unlock = false;
-        var password = false;
         if (options.account) {
             this.flags = this.flags.concat([
                 "--etherbase", options.account,
                 "--unlock", options.account,
                 "--password", join(this.datadir, ".password")
             ]);
-            unlock = true;
-            password = true;
         }
         if (f && f.constructor === Object) {
             for (var flag in f) {
@@ -90,17 +86,10 @@ module.exports = {
                 if (flag === "ws") ws = true;
                 if (flag === "wsport") wsport = true;
                 if (flag === "wsapi") wsapi = true;
-                if (flag === "unlock") unlock = true;
-                if (flag === "password") password = true;
             }
         }
         if ((rpcport || rpcapi) && !rpc) this.flags.push("--rpc");
         if ((wsport || wsapi) && !ws) this.flags.push("--ws");
-        if (unlock && !password) {
-            this.flags = this.flags.concat([
-                "--password", join(this.datadir, ".password")
-            ]);
-        }
         this.configured = true;
         return this.flags;
     },
